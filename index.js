@@ -15,13 +15,20 @@ const arrify = require('arrify')
 const depthLimit = (maxDepth, options = {}, callback = () => {}) => validationContext => {
   try {
     const { definitions } = validationContext.getDocument()
+    console.log('definitions:', definitions);
     const fragments = getFragments(definitions)
+    console.log('fragments:', fragments);
     const queries = getQueriesAndMutations(definitions)
+    console.log('queries:', queries);
     const queryDepths = {}
     for (let name in queries) {
+      console.log(`selections for ${name} are:`, queries[name].selectionSet.selections);
       queryDepths[name] = determineDepth(queries[name], fragments, 0, maxDepth, validationContext, name, options)
     }
+    console.log('query depths are: ', queryDepths);
+    console.log('Kind:', Kind);
     callback(queryDepths)
+    console.log('validation context is: ', validationContext);
     return validationContext
   } catch (err) {
     /* istanbul ignore next */ { // eslint-disable-line no-lone-blocks
@@ -30,7 +37,16 @@ const depthLimit = (maxDepth, options = {}, callback = () => {}) => validationCo
     }
   }
 }
-
+/*
+const depthlimit = (...) =>
+// depthlimit RETURNS A FUNCTION
+// INNER FUNCTION returns AN OBJECT
+  (validationContext) => {
+    try {
+      return validationContext (which is an object)
+    }
+  }
+*/
 module.exports = depthLimit
 
 function getFragments(definitions) {
@@ -83,7 +99,7 @@ function determineDepth(node, fragments, depthSoFar, maxDepth, context, operatio
       throw new Error('uh oh! depth crawler cannot handle: ' + node.kind)
   }
 }
-
+// for cases with nothing following? lines 106, 107?
 function seeIfIgnored(node, ignore) {
   for (let rule of arrify(ignore)) {
     const fieldName = node.name.value

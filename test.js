@@ -55,7 +55,7 @@ const schema = buildSchema(`
   }
 `)
 
-test('should count depth without fragment', t => {
+test.skip('should count depth without fragment', t => {
   const query = `
     query read0 {
       version
@@ -108,7 +108,7 @@ test('should count depth without fragment', t => {
   t.deepEqual([], errors)
 })
 
-test('should count with fragments', t => {
+test.skip('should count with fragments', t => {
   const query = `
     query read0 {
       ... on Query {
@@ -173,14 +173,14 @@ test('should count with fragments', t => {
   t.deepEqual([], errors)
 })
 
-test('should ignore the introspection query', t => {
+test.skip('should ignore the introspection query', t => {
   const document = createDocument(introQuery)
   t.plan(1)
   const errors = validate(schema, document, [ ...specifiedRules, depthLimit(5) ])
   t.deepEqual([], errors)
 })
 
-test('should catch a query thats too deep', t => {
+test.skip('should catch a query thats too deep', t => {
   const query = `{
     user {
       pets {
